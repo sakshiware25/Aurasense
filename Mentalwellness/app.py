@@ -4,8 +4,8 @@ import requests
 from googleapiclient.discovery import build
 
 # API keys
-COHERE_API_KEY = 'paste_your_api_key'
-YOUTUBE_API_KEY = 'paste_your_api_key'
+COHERE_API_KEY = 'GsR7YzmlU2A9yNpOH3XlQT13EcwhaoB9u434zig8'
+YOUTUBE_API_KEY = 'AIzaSyA22e0ClsFt11cbFSEr4QvMvVpkedN_PlQ'
 
 # CSS styles
 st.markdown("""
