@@ -1,11 +1,21 @@
+from dotenv import load_dotenv
+import os
 import streamlit as st
 import random
 import requests
 from googleapiclient.discovery import build
 
+load_dotenv()
+
 # API keys
+<<<<<<< HEAD
 COHERE_API_KEY = 'GsR7YzmlU2A9yNpOH3XlQT13EcwhaoB9u434zig8'
 YOUTUBE_API_KEY = 'AIzaSyA22e0ClsFt11cbFSEr4QvMvVpkedN_PlQ'
+=======
+
+cohere_api_key  = os.getenv("COHERE_API_KEY")
+youtube_api_key  = os.getenv("YOUTUBE_API_KEY")
+>>>>>>> 32b1df368 (Your commit message)
 
 # CSS styles
 st.markdown("""
@@ -54,7 +64,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Greeting messages and journal prompts
+# Greeting messages 
 greeting_messages = [
      "Hi {user_name}! You’re 100% awesome!",
     "Welcome back, {user_name}! Let's make today amazing!",
@@ -100,7 +110,7 @@ journal_prompts = [
 # Helper functions
 def generate_ai_response(user_input):
     url = "https://api.cohere.ai/v1/generate"
-    headers = {"Authorization": f"Bearer {COHERE_API_KEY}", "Content-Type": "application/json"}
+    headers = {"Authorization": f"Bearer {cohere_api_key}", "Content-Type": "application/json"}
     payload = {
         "model": "command-r-plus",
         "prompt": f"User feels: {user_input}. Respond with empathy in 3-4 sentences.",
@@ -115,7 +125,7 @@ def generate_ai_response(user_input):
         return f"Error: {str(e)}"
 
 def fetch_youtube_playlist(query):
-    youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
+    youtube = build("youtube", "v3", developerKey=youtube_api_key)
     response = youtube.search().list(part="snippet", q=f"{query} music playlist", type="playlist", maxResults=1).execute()
     items = response.get("items", [])
     if items:
@@ -161,7 +171,7 @@ if st.session_state.page == "home":
                 "</div>", unsafe_allow_html=True)
 
 elif st.session_state.page == "mood":
-    mood = st.text_area("How are you feeling today?")
+    mood = st.text_area("How are you feeling today?(Share in paragraph)")
     if st.button("Submit Mood"):
         if mood:
             ai_response = generate_ai_response(mood)
@@ -196,6 +206,7 @@ elif st.session_state.page == "mood":
 
 elif st.session_state.page == "music":
     st.markdown("### Music Recommendation")
+    st.markdown("<h5 style='text-align: center; color: gray;'>When your mood meets the perfect playlist. Enjoy the vibe!</h5>", unsafe_allow_html=True)
     emotion = st.selectbox("Select your mood:", ["Happy", "Sad", "Relaxed","Anger","Stressed", "Energetic", "Motivated", "Calm"])
     if st.button("Get Playlist"):
         playlist = fetch_youtube_playlist(emotion)
@@ -212,9 +223,14 @@ elif st.session_state.page == "journal":
     st.markdown(f"### Your Journal Prompt: {prompt}")
     journal_entry = st.text_area("Write your response:")
     if st.button("Download Journal"):
-        if journal_entry:
+        if journal_entry.strip():  # Check if the journal entry is not empty
             file_content = f"Journal Prompt: {prompt}\n\nYour Entry:\n{journal_entry}"
+        
+        # Download the journal as a text file
             st.download_button("Download as Text File", file_content, file_name="journal.txt")
-            st.session_state.current_prompt = random.choice(journal_prompts)  # Update prompt after download
+        
+        # Show success message after download and reset the journal entry
+            st.session_state.journal_entry = ""  # Clear the journal entry after download
+            st.success("Thanks for being here! Now go on and share your enlightened aura with the world. 🌟")
         else:
             st.warning("Please write your response before downloading.")
