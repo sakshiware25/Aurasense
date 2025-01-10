@@ -7,15 +7,9 @@ from googleapiclient.discovery import build
 
 load_dotenv()
 
-# API keys
-<<<<<<< HEAD
-COHERE_API_KEY = 'GsR7YzmlU2A9yNpOH3XlQT13EcwhaoB9u434zig8'
-YOUTUBE_API_KEY = 'AIzaSyA22e0ClsFt11cbFSEr4QvMvVpkedN_PlQ'
-=======
 
 cohere_api_key  = os.getenv("COHERE_API_KEY")
 youtube_api_key  = os.getenv("YOUTUBE_API_KEY")
->>>>>>> 32b1df368 (Your commit message)
 
 # CSS styles
 st.markdown("""
